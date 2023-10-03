@@ -87,14 +87,14 @@ def get_pos():
     vel = init_vel
     acc = init_acc
     while True:
-        half_new_vel = add_vecs(vel, mul_s2v(0.5 * dt, acc))
-        new_pos = add_vecs(pos, mul_s2v(dt, half_new_vel))
-        new_acc = get_acc(new_pos, half_new_vel, mass)
-        new_vel = add_vecs(half_new_vel, mul_s2v(0.5 * dt, new_acc))
+        new_pos = add_vecs(pos, mul_s2v(dt, vel))
+        new_vel = add_vecs(vel, mul_s2v(dt, acc))
+        new_acc = get_acc(new_pos, new_vel, mass)
 
         pos = new_pos
         vel = new_vel
         acc = new_acc
+
         yield (pos[0], pos[1])
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
