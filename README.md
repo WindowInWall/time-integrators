@@ -1,2 +1,2 @@
 # time-integrators
-stuff for stufF
+practice time-integrators
