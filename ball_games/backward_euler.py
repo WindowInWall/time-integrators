@@ -9,11 +9,11 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-g = [0.0, 9.81]
+g = [0, 9.81]
 
 # Initial position, velocity, and acceleration vectors.
-init_pos = [0, 4]
-init_vel = [100, 100]
+init_pos = [screen.get_width() / 2, 0]
+init_vel = [0, 0]
 init_acc = [0, 0]
 
 # in milliCoulombs
@@ -21,6 +21,8 @@ charge_mouse = 0.1
 charge_ball = 0.1
 
 mass = 30
+k = 1
+d = 2
 radius = 40
 player_radius = 40
 
@@ -81,19 +83,26 @@ def get_force(pos, vel, m):
 def get_acc(pos, vel, m):
     return mul_s2v(1/m, get_force(pos, vel, m))
 
+def getNewVel(pos,vel, m):
+    vec = mul_s2v(1 - ((k/m) * (dt**2)) + ((d/m) * dt), add_vecs(add_vecs(vel, mul_s2v(dt, g)), mul_s2v(k/m * dt, pos)))
+    vec[0] = 0
+    return vec
+
 def get_pos():
     """A generator yielding the ball's position at time t."""
     pos = init_pos
     vel = init_vel
-    acc = init_acc
+    #acc = init_acc
     while True:
+        print(vel[1])
+        new_vel = add_vecs(vel, getNewVel(pos, vel, mass))
+        print(vel[0])
         new_pos = add_vecs(pos, mul_s2v(dt, vel))
-        new_vel = add_vecs(vel, mul_s2v(dt, acc))
-        new_acc = get_acc(new_pos, new_vel, mass)
+        #new_acc = get_acc(new_pos, new_vel, mass)
 
         pos = new_pos
         vel = new_vel
-        acc = new_acc
+        #acc = new_acc
 
         yield (pos[0], pos[1])
 
